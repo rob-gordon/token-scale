@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha './src/**/*.spec.js'",
+    "test:watch": "mocha './src/**/*.spec.js' -w",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch"
   },
@@ -16,7 +17,9 @@
     "@babel/preset-env": "^7.4.3",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.1",
+    "mocha": "^6.0.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
-  }
+  },
+  "dependencies": {}
 }
