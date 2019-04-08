@@ -31,6 +31,8 @@ class TokenScale {
     if (this.mode === 'function') {
       return this.withPrecision(this.selector(at + this.origin));
     }
+
+    return false;
   }
 }
 
