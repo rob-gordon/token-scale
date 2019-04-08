@@ -2,35 +2,58 @@ const TokenScale = require('./TokenScale');
 var assert = require('assert');
 
 describe('TokenScale', () => {
-  describe('constructor()', () => {
+  describe('default constructor()', () => {
     let T;
     beforeEach(() => {
       T = new TokenScale([0, 1, 2]);
     });
-    it('should return an instance of TokenScale', () => {
+    it('returns an instance of TokenScale', () => {
       assert(T instanceof TokenScale);
     });
-    it('should set a default origin', () => {
+    it('sets a default origin', () => {
       assert(T.origin === 0);
     });
-    it('should set the mode', () => {
+    it('sets the mode', () => {
       assert(T.mode === 'array');
     });
   });
 
-  describe('constructor() args', () => {
-    it('should be able to set an array of values', () => {});
-    it('should be able to set the origin', () => {
+  describe('constructor()', () => {
+    it('sets an array of values', () => {
+      const arr = [0, 1, 2, 3];
+      const T = new TokenScale(arr.slice(0));
+      var is_same =
+        arr.length == T.selector.length &&
+        arr.every(function(element, index) {
+          return element === T.selector[index];
+        });
+      assert(is_same);
+    });
+    it('sets an array of named values', () => {
+      const arr = [
+        { name: 'good', value: 0 },
+        { name: 'better', value: 1 },
+        { name: 'best', value: 2 }
+      ];
+      const T = new TokenScale(arr.slice(0));
+      var is_same =
+        arr.length == T.selector.length &&
+        arr.every(function(element, index) {
+          return element === T.selector[index];
+        });
+      assert(is_same);
+    });
+    it('sets the origin', () => {
       const T = new TokenScale([0, 1, 2], { origin: 10 });
       assert(T.origin === 10);
     });
 
-    it('should be able to set the precision', () => {
+    it('sets the precision', () => {
       const T = new TokenScale([0.005, 0.111, 0.2222], { precision: 2 });
       assert(T.precision === 2);
     });
 
-    it('should require a function or an array', () => {
+    it('requires a function or an array', () => {
       assert.throws(() => {
         const T = new TokenScale();
       }, new Error('Selector is not valid'));
@@ -38,31 +61,36 @@ describe('TokenScale', () => {
   });
 
   describe('get()', () => {
-    it('should use origin with no input', () => {
+    it('uses origin with no input', () => {
       const A = new TokenScale([1, 2, 3]);
       const F = new TokenScale(n => n + 1);
       assert(A.get() === 1);
       assert(F.get() === 1);
     });
 
-    it('should use the origin in return', () => {
+    it('uses the origin in return', () => {
       const A = new TokenScale([1, 2, 3], { origin: 1 });
       const F = new TokenScale(n => n + 1, { origin: 1 });
       assert(A.get() === 2);
       assert(F.get() === 2);
     });
 
-    it('should return with the correct precision', () => {
+    it('returns with the correct precision', () => {
       const A = new TokenScale([1.111, 2.222, 3.333], { precision: 2 });
       const F = new TokenScale(n => n + 1.1111111, { precision: 2 });
       assert(A.get() === 1.11);
       assert(F.get() === 1.11);
     });
 
-    it('should return false if no mode set', () => {
+    it('returns false if no mode set', () => {
       const A = new TokenScale([0, 1, 2, 3]);
       A.mode = null;
       assert(A.get() === false);
+    });
+
+    it('returns value if named array', () => {
+      const A = new TokenScale([{ name: 'Hello', value: 100 }]);
+      assert(A.get(0) === 100);
     });
   });
 });

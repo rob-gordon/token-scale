@@ -26,12 +26,16 @@ class TokenScale {
 
   get(at = 0) {
     if (this.mode === 'array') {
-      return this.withPrecision(this.selector[at + this.origin]);
+      const result = this.selector[at + this.origin];
+      if (typeof result === 'object' && 'value' in result) {
+        return this.withPrecision(result.value);
+      } else {
+        return this.withPrecision(result);
+      }
     }
     if (this.mode === 'function') {
       return this.withPrecision(this.selector(at + this.origin));
     }
-
     return false;
   }
 }
