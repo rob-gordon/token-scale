@@ -1,12 +1,11 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-
 module.exports = {
-  entry: "./src/TokenScale.js",
+  entry: './src/index.js',
   output: {
-    library: "TokenScale",
-    libraryTarget: "umd",
-    filename: "TokenScale.js"
+    library: 'CoreLayout',
+    libraryTarget: 'umd',
+    filename: 'CoreLayout.js'
   },
   module: {
     rules: [
@@ -14,12 +13,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-],
+  plugins: [new CleanWebpackPlugin()]
 };

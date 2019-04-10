@@ -3,24 +3,33 @@ const defaultArgs = {
   precision: false
 };
 
+function isPrimitive(test) {
+  return test !== Object(test);
+}
+
 class TokenScale {
   constructor(selector, args = {}) {
     if (
       !selector ||
-      !(selector instanceof Function || Array.isArray(selector))
+      !(
+        selector instanceof Function ||
+        Array.isArray(selector) ||
+        isPrimitive(selector)
+      )
     ) {
       throw new Error('Selector is not valid');
     }
 
     let input = { ...defaultArgs, ...args };
 
-    this.selector = selector;
-    this.mode = Array.isArray(selector) ? 'array' : 'function';
+    this.selector = isPrimitive(selector) ? [selector] : selector;
+    this.mode = Array.isArray(this.selector) ? 'array' : 'function';
     this.origin = input.origin;
     this.precision = input.precision;
   }
 
   withPrecision(x) {
+    if (typeof x === 'string') return x;
     return parseFloat(this.precision ? x.toFixed(this.precision) : x);
   }
 

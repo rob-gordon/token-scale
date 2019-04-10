@@ -43,6 +43,10 @@ describe('TokenScale', () => {
         });
       assert(is_same);
     });
+    it('sets an individual number as an array', () => {
+      const T = new TokenScale(16);
+      assert(T.get() === 16);
+    });
     it('sets the origin', () => {
       const T = new TokenScale([0, 1, 2], { origin: 10 });
       assert(T.origin === 10);
