@@ -1,8 +1,8 @@
 {
   "name": "token-scale",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
-  "main": "dist/TokenScale.js",
+  "main": "dist/CoreLayout.js",
   "scripts": {
     "test": "nyc mocha './src/**/*.spec.js'",
     "test:watch": "mocha './src/**/*.spec.js' -w",
