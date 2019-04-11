@@ -1,17 +1,17 @@
-const TokenScale = require('./TokenScale');
+const Token = require('./Token');
 
-class TokenChain {
-  constructor(tokenScales, options = {}) {
-    if (tokenScales === null) {
-      throw new Error('array of type TokenScale required');
+class Delta {
+  constructor(tokens, options = {}) {
+    if (tokens === null) {
+      throw new Error('array of type Token required');
     }
-    if (tokenScales instanceof TokenScale) {
-      this.tokenScales = [tokenScales];
+    if (tokens instanceof Token) {
+      this.tokens = [tokens];
     } else {
-      this.tokenScales = tokenScales.slice(0);
+      this.tokens = tokens.slice(0);
     }
 
-    this.id = TokenChain.createID();
+    this.id = Delta.createID();
 
     if (!('name' in options)) {
       throw new Error('You must pass options with a name');
@@ -25,11 +25,9 @@ class TokenChain {
 
   getNextValidIndex(curIndex) {
     let nextValidBreakpoint = curIndex + 1;
-    const highestValidIndex = this.tokenScales.lastIndexOf(
-      this.tokenScales.slice(-1)[0]
-    );
+    const highestValidIndex = this.tokens.lastIndexOf(this.tokens.slice(-1)[0]);
     while (
-      !(nextValidBreakpoint in this.tokenScales) &&
+      !(nextValidBreakpoint in this.tokens) &&
       nextValidBreakpoint <= highestValidIndex
     ) {
       nextValidBreakpoint = nextValidBreakpoint + 1;
@@ -40,24 +38,24 @@ class TokenChain {
   }
 
   write(breakpointIndex, arg, fluid = null) {
-    if (breakpointIndex in this.tokenScales) {
-      const tokenScale = this.tokenScales[breakpointIndex];
+    if (breakpointIndex in this.tokens) {
+      const token = this.tokens[breakpointIndex];
       if (
         !this.fluid ||
         fluid === false ||
         breakpointIndex === this.coreLayout.breakpoints.length - 1
       ) {
-        return this.wrapProperty(`${tokenScale.get(arg)}${this.unit}`);
+        return this.wrapProperty(`${token.get(arg)}${this.unit}`);
       } else {
         // get next valid breakpoint
         const nextBreakpoint = this.getNextValidIndex(breakpointIndex);
-        const tokenScale2 = this.tokenScales[nextBreakpoint];
+        const token2 = this.tokens[nextBreakpoint];
         const breakpointDiff =
           this.coreLayout.breakpoints[nextBreakpoint] -
           this.coreLayout.breakpoints[breakpointIndex];
         return this.wrapProperty(
-          `calc(${tokenScale.get(arg)}${this.unit} + ${tokenScale2.get(arg) -
-            tokenScale.get(arg)} * ((100vw - ${
+          `calc(${token.get(arg)}${this.unit} + ${token2.get(arg) -
+            token.get(arg)} * ((100vw - ${
             this.coreLayout.breakpoints[breakpointIndex]
           }px) / ${breakpointDiff}))`
         );
@@ -73,7 +71,7 @@ class TokenChain {
   // can pass format function to filter output and add unit or anythign like that...
 }
 
-TokenChain.createID = () => {
+Delta.createID = () => {
   return (
     '_' +
     Math.random()
@@ -82,4 +80,4 @@ TokenChain.createID = () => {
   );
 };
 
-module.exports = TokenChain;
+module.exports = Delta;

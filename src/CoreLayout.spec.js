@@ -1,7 +1,7 @@
 var assert = require('assert');
 const CoreLayout = require('./CoreLayout');
-const TokenChain = require('./TokenChain');
-const TokenScale = require('./TokenScale');
+const Delta = require('./Delta');
+const Token = require('./Token');
 
 function createPowerFunction(base = 1, growth = 1.2, decimalPlaces = 2) {
   return size =>
@@ -21,32 +21,30 @@ describe('CoreLayout', () => {
       assert('breakpoints' in C);
       assert(C.breakpoints[0] === 1000);
     });
-    it('sets tokenChains', () => {
-      assert('tokenChains' in C);
-      assert(Array.isArray(C.tokenChains));
+    it('sets deltas', () => {
+      assert('deltas' in C);
+      assert(Array.isArray(C.deltas));
     });
   });
 
   describe('set() & get()', () => {
     let C;
     beforeEach(() => {
-      const fontSize = new TokenScale(createPowerFunction(16, 1.25));
-      const fontSizeChain = new TokenChain([fontSize], { name: 'fontSize' });
-      fontSizeChain.tokenScales[2] = new TokenScale(
-        createPowerFunction(18, 1.25)
-      );
+      const fontSize = new Token(createPowerFunction(16, 1.25));
+      const fontSizeChain = new Delta([fontSize], { name: 'fontSize' });
+      fontSizeChain.tokens[2] = new Token(createPowerFunction(18, 1.25));
       C = new CoreLayout({
         breakpoints: [500, 1000, 1500]
       });
       C.set(fontSizeChain);
     });
 
-    it('adds TokenChain to this.tokenChains', () => {
-      assert(C.tokenChains.length === 1);
+    it('adds Delta to this.deltas', () => {
+      assert(C.deltas.length === 1);
     });
 
-    it('returns a TokenChain by name', () => {
-      assert(C.get('fontSize').tokenScales[0].get() === 16);
+    it('returns a Delta by name', () => {
+      assert(C.get('fontSize').tokens[0].get() === 16);
     });
 
     it('has a helpful debug function', () => {

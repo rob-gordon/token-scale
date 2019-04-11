@@ -1,5 +1,5 @@
-const TokenChain = require('./TokenChain');
-const TokenScale = require('./TokenScale');
+const Delta = require('./Delta');
+const Token = require('./Token');
 const CoreLayout = require('./CoreLayout');
 
-module.exports = { CoreLayout, TokenChain, TokenScale };
+module.exports = { CoreLayout, Delta, Token };

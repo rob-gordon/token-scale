@@ -1,5 +1,5 @@
-const TokenScale = require('./TokenScale');
-const TokenChain = require('./TokenChain');
+const Token = require('./Token');
+const Delta = require('./Delta');
 
 const defaultArgs = {
   breakpoints: [1000]
@@ -9,31 +9,26 @@ class CoreLayout {
   constructor(_args) {
     let args = { ...defaultArgs, ..._args };
     Object.assign(this, args);
-    this.tokenChains = [];
+    this.deltas = [];
   }
 
-  set(tokenChain) {
-    this.tokenChains.push(tokenChain);
+  set(delta) {
+    this.deltas.push(delta);
     // i dont like this pattern at all
-    tokenChain.coreLayout = this;
+    delta.coreLayout = this;
   }
 
   get(name) {
-    return (
-      this.tokenChains.filter(tokenChain => tokenChain.name === name)[0] ||
-      false
-    );
+    return this.deltas.filter(delta => delta.name === name)[0] || false;
   }
 
   debug() {
     console.log('-----------------------------------------');
     this.breakpoints.forEach((breakpoint, i) => {
       console.log(`B: ${breakpoint}`);
-      this.tokenChains.forEach(tokenChain => {
-        if (i in tokenChain.tokenScales) {
-          console.log(
-            `\tTc — ${tokenChain.name}: ${tokenChain.tokenScales[i].get()}`
-          );
+      this.deltas.forEach(delta => {
+        if (i in delta.tokens) {
+          console.log(`\tTc — ${delta.name}: ${delta.tokens[i].get()}`);
         }
       });
     });
@@ -44,9 +39,9 @@ class CoreLayout {
   write(breakpointIndex, names, fluid = null) {
     // need to check for type compliance here...
     return Object.keys(names).map(name => {
-      if (this.tokenChains.map(x => x.name).includes(name)) {
-        const tokenChain = this.tokenChains.filter(x => x.name === name)[0];
-        return tokenChain.write(breakpointIndex, names[name], fluid);
+      if (this.deltas.map(x => x.name).includes(name)) {
+        const delta = this.deltas.filter(x => x.name === name)[0];
+        return delta.write(breakpointIndex, names[name], fluid);
       }
     });
   }

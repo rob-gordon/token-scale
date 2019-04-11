@@ -7,7 +7,7 @@ function isPrimitive(test) {
   return test !== Object(test);
 }
 
-class TokenScale {
+class Token {
   constructor(selector, args = {}) {
     if (
       !selector ||
@@ -49,4 +49,4 @@ class TokenScale {
   }
 }
 
-module.exports = TokenScale;
+module.exports = Token;
