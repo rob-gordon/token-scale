@@ -1,31 +1,12 @@
-const { TokenChain, CoreLayout } = require('./CoreLayout');
-const TokenScale = require('./TokenScale');
-
 var assert = require('assert');
+const CoreLayout = require('./CoreLayout');
+const TokenChain = require('./TokenChain');
+const TokenScale = require('./TokenScale');
 
 function createPowerFunction(base = 1, growth = 1.2, decimalPlaces = 2) {
   return size =>
     parseFloat((base * Math.pow(growth, size)).toFixed(decimalPlaces));
 }
-
-describe('TokenChain', () => {
-  describe('default constructor()', () => {
-    let T;
-    beforeEach(() => {
-      T = new TokenChain(new TokenScale(16), { name: 'fontSize' });
-    });
-    it('returns an instance of TokenChain', () => {
-      assert(T instanceof TokenChain);
-    });
-    it('sets an ID', () => {
-      assert('id' in T);
-    });
-    it('sets tokenScales', () => {
-      assert('tokenScales' in T);
-      assert(T.tokenScales[0].get() === 16);
-    });
-  });
-});
 
 describe('CoreLayout', () => {
   describe('default constructor()', () => {

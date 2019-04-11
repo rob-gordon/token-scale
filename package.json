@@ -1,8 +1,8 @@
 {
   "name": "token-scale",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
-  "main": "dist/CoreLayout.js",
+  "main": "dist/CoreLayout.node.js",
   "scripts": {
     "test": "nyc mocha './src/**/*.spec.js'",
     "test:watch": "mocha './src/**/*.spec.js' -w",
@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.4.3",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.1",
+    "deepmerge": "^3.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
     "webpack": "^4.29.6",

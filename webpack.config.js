@@ -1,6 +1,8 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const deepmerge = require('deepmerge');
+const path = require('path');
 
-module.exports = {
+const defaultSettings = {
   entry: './src/index.js',
   output: {
     library: 'CoreLayout',
@@ -17,6 +19,22 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [new CleanWebpackPlugin()]
+  }
 };
+
+const serverConfig = deepmerge(defaultSettings, {
+  target: 'node',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'CoreLayout.node.js'
+  }
+});
+
+const clientConfig = deepmerge(defaultSettings, {
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'CoreLayout.js'
+  }
+});
+
+module.exports = [serverConfig, clientConfig];
